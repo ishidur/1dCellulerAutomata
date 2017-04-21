@@ -40,7 +40,7 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 	int i;
 	double width = VIEW_SIZE / CELLS_NO;
 	double x = -VIEW_SIZE / 2.0;
-	double y = (time - TIME_LIM / 2.0) * width;
+	double y = (TIME_LIM / 2.0 - time) * width;
 	for (i = 0; i < CELLS_NO; i++) {
 		drawCell(x, y, cells[i]);
 		x += width;
@@ -50,14 +50,12 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 //cell update by rule
 int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 {
-	return neighborCells[1];
-	/*
 	int nextCell=0;
 	for (int i = 0; i < CELL_NEIGHBOR_NO * 2 + 1; i++)
 	{
 		nextCell += neighborCells[i];
 	}
-	return nextCell% STATE_NO;*/
+	return nextCell% STATE_NO;
 }
 
 void display(void)
