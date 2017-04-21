@@ -24,14 +24,7 @@ void drawSquare(double x, double y, double width, double height) //render square
 void drawCell(double x, double y, int state) //render single cell
 {
 	double width = VIEW_SIZE / CELLS_NO;
-	switch (state) {
-	case 1:
-		glColor3d(1.0, 0.0, 0.0);
-		break;
-	default:
-		glColor3d(0.0, 0.0, 1.0);
-		break;
-	}
+	glColor3d((STATE_NO - 1 - state) / (double)(STATE_NO - 1), (STATE_NO - 1 - state) / (double)(STATE_NO - 1), (STATE_NO - 1 - state) / (double)(STATE_NO - 1));
 	drawSquare(x, y, width, width);
 }
 
@@ -50,7 +43,7 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 //cell update by rule
 int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 {
-	int nextCell=0;
+	int nextCell = 0;
 	for (int i = 0; i < CELL_NEIGHBOR_NO * 2 + 1; i++)
 	{
 		nextCell += neighborCells[i];
