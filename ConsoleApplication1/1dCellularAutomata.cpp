@@ -7,7 +7,7 @@
 
 #define CELLS_NO 51 //セルの全体数
 #define CELL_NEIGHBOR_NO 1 //セルの近傍数
-#define RULE_NO 30 //規則
+#define RULE_NO 25 //規則
 #define TIME_LIM 50 //時間
 #define STATE_NO 2 //状態数
 #define VIEW_SIZE 2.0 //画面の幅
@@ -34,7 +34,8 @@ public:
 
 Rule thisRule = Rule(RULE_NO, STATE_NO, CELL_NEIGHBOR_NO);
 
-void drawSquare(double x, double y, double width, double height) //render square
+//render square
+void drawSquare(double x, double y, double width, double height)
 {
 	glBegin(GL_POLYGON);
 	glVertex2d(x, y);
@@ -43,15 +44,15 @@ void drawSquare(double x, double y, double width, double height) //render square
 	glVertex2d(x, y + height);
 	glEnd();
 }
-
-void drawCell(double x, double y, int state) //render single cell
+//render single cell
+void drawCell(double x, double y, int state)
 {
 	double width = VIEW_SIZE / CELLS_NO;
 	glColor3d((STATE_NO - 1 - state) / (double)(STATE_NO - 1), (STATE_NO - 1 - state) / (double)(STATE_NO - 1), (STATE_NO - 1 - state) / (double)(STATE_NO - 1));
 	drawSquare(x, y, width, width);
 }
-
-void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
+//render cells row
+void drawCellsRow(int cells[CELLS_NO], int time)
 {
 	int i;
 	double width = VIEW_SIZE / CELLS_NO;
@@ -62,8 +63,7 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 		x += width;
 	}
 }
-//TODO
-//cell update by rule
+//cell update by Rule
 int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 {
 	int decimalState = 0;
@@ -72,17 +72,12 @@ int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 	{
 		decimalState += (int)pow((double)STATE_NO, (double)(i)) * neighborCells[cellMaxNo - i - 1];
 	}
-	printf("decimalstate: %d\n", decimalState);
 	int n = thisRule.getNextState(decimalState);
 	return n;
 }
 
 void display(void)
 {
-	for (int i = 0; i < thisRule.rulePatterns; i++)
-	{
-		printf("%d\n", thisRule.getNextState(i));
-	}
 	glClear(GL_COLOR_BUFFER_BIT);
 	int cells[CELLS_NO] = { 0 }; //current cells state
 	int tmpCells[CELLS_NO] = { 0 }; //temporary cells array
