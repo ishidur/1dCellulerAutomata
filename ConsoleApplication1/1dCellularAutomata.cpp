@@ -21,16 +21,18 @@ public:
 		rulePatterns = (int)pow((double)STATE_NO, (double)2 * CELL_NEIGHBOR_NO + 1);
 	}
 	int getNextState(int decimalState) {
-		int* rules = new int[rulePatterns];
+		int nextState = 0;
 		int leftDecimal = ruleNo;
-		for (int i = 0; i < rulePatterns; i++)
+		for (int i = 0; i <= decimalState; i++)
 		{
-			rules[i] = leftDecimal % STATE_NO;
+			nextState = leftDecimal % STATE_NO;
 			leftDecimal /= STATE_NO;
 		}
-		return rules[decimalState];
+		return nextState;
 	}
 };
+
+Rule thisRule = Rule(RULE_NO, STATE_NO, CELL_NEIGHBOR_NO);
 
 void drawSquare(double x, double y, double width, double height) //render square
 {
@@ -74,7 +76,6 @@ int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 
 void display(void)
 {
-	Rule thisRule = Rule(RULE_NO, STATE_NO, CELL_NEIGHBOR_NO);
 	for (int i = 0; i < thisRule.rulePatterns; i++)
 	{
 		printf("%d\n", thisRule.getNextState(i));
@@ -117,4 +118,3 @@ int main(int argc, char *argv[])
 	glutMainLoop();
 	return 0;
 }
-
