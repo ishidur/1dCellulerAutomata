@@ -48,25 +48,36 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 }
 //TODO
 //cell update by rule
-int updateCell(int cell)
+int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 {
-	return cell;
+	return neighborCells[1];
+	/*
+	int nextCell=0;
+	for (int i = 0; i < CELL_NEIGHBOR_NO * 2 + 1; i++)
+	{
+		nextCell += neighborCells[i];
+	}
+	return nextCell% STATE_NO;*/
 }
 
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	int i, j, k;
 	int cells[CELLS_NO] = { 0 }; //current cells state
 	int tmpCells[CELLS_NO] = { 0 }; //temporary cells array
 	cells[(int)(CELLS_NO / 2.0)] = 1;
-	for (i = 0; i < TIME_LIM; i++) {
+	for (int i = 0; i < TIME_LIM; i++) {
 		drawCellsRow(cells, i);
-		for (j = 0; j < CELLS_NO; j++)
+		for (int j = 0; j < CELLS_NO; j++)
 		{
-			tmpCells[j] = updateCell(cells[j]);
+			int neighborCells[CELL_NEIGHBOR_NO * 2 + 1] = { 0 };
+			for (int l = 0; l < CELL_NEIGHBOR_NO * 2 + 1; l++)
+			{
+				neighborCells[l] = cells[(j + l - CELL_NEIGHBOR_NO) % CELLS_NO];
+			}
+			tmpCells[j] = updateCell(neighborCells);
 		}
-		for (k = 0; k < CELLS_NO; k++)
+		for (int k = 0; k < CELLS_NO; k++)
 		{
 			cells[k] = tmpCells[k];
 		}
