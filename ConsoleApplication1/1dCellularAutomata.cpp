@@ -66,12 +66,15 @@ void drawCellsRow(int cells[CELLS_NO], int time) //render cells row
 //cell update by rule
 int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 {
-	int nextCell = 0;
-	for (int i = 0; i < CELL_NEIGHBOR_NO * 2 + 1; i++)
+	int decimalState = 0;
+	int cellMaxNo = CELL_NEIGHBOR_NO * 2 + 1;
+	for (int i = 0; i < cellMaxNo; i++)
 	{
-		nextCell += neighborCells[i];
+		decimalState += (int)pow((double)STATE_NO, (double)(i)) * neighborCells[cellMaxNo - i - 1];
 	}
-	return nextCell% STATE_NO;
+	printf("decimalstate: %d\n", decimalState);
+	int n = thisRule.getNextState(decimalState);
+	return n;
 }
 
 void display(void)
@@ -91,7 +94,12 @@ void display(void)
 			int neighborCells[CELL_NEIGHBOR_NO * 2 + 1] = { 0 };
 			for (int l = 0; l < CELL_NEIGHBOR_NO * 2 + 1; l++)
 			{
-				neighborCells[l] = cells[(j + l - CELL_NEIGHBOR_NO) % CELLS_NO];
+				int n = (j + l - CELL_NEIGHBOR_NO) % CELLS_NO;
+				if (n < 0)
+				{
+					n += CELLS_NO;
+				}
+				neighborCells[l] = cells[n];
 			}
 			tmpCells[j] = updateCell(neighborCells);
 		}
