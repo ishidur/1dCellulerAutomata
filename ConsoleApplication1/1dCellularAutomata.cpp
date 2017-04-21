@@ -3,13 +3,34 @@
 
 #include "stdafx.h"
 #include <GL/glut.h>
+#include <math.h>
 
 #define CELLS_NO 51 //セルの全体数
 #define CELL_NEIGHBOR_NO 1 //セルの近傍数
-#define RULE_NO 90 //規則
+#define RULE_NO 30 //規則
 #define TIME_LIM 50 //時間
 #define STATE_NO 2 //状態数
 #define VIEW_SIZE 2.0 //画面の幅
+
+class Rule {
+public:
+	int ruleNo;
+	int rulePatterns;
+	Rule(int _ruleNo, int stateNo, int neighborNo) {
+		ruleNo = _ruleNo;
+		rulePatterns = (int)pow((double)STATE_NO, (double)2 * CELL_NEIGHBOR_NO + 1);
+	}
+	int getNextState(int decimalState) {
+		int* rules = new int[rulePatterns];
+		int leftDecimal = ruleNo;
+		for (int i = 0; i < rulePatterns; i++)
+		{
+			rules[i] = leftDecimal % STATE_NO;
+			leftDecimal /= STATE_NO;
+		}
+		return rules[decimalState];
+	}
+};
 
 void drawSquare(double x, double y, double width, double height) //render square
 {
@@ -53,6 +74,11 @@ int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
 
 void display(void)
 {
+	Rule thisRule = Rule(RULE_NO, STATE_NO, CELL_NEIGHBOR_NO);
+	for (int i = 0; i < thisRule.rulePatterns; i++)
+	{
+		printf("%d\n", thisRule.getNextState(i));
+	}
 	glClear(GL_COLOR_BUFFER_BIT);
 	int cells[CELLS_NO] = { 0 }; //current cells state
 	int tmpCells[CELLS_NO] = { 0 }; //temporary cells array
