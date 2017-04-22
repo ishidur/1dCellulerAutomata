@@ -18,7 +18,7 @@ public:
 	int rulePatterns;
 	Rule(int _ruleNo, int stateNo, int neighborNo) {
 		ruleNo = _ruleNo;
-		rulePatterns = (int)pow((double)STATE_NO, (double)2 * CELL_NEIGHBOR_NO + 1);
+		rulePatterns = int(pow(double(STATE_NO), double(2) * CELL_NEIGHBOR_NO + 1));
 	}
 	int getNextState(int decimalState) {
 		int nextState = 0;
