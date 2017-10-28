@@ -1,7 +1,8 @@
-// ConsoleApplication1.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// 1dCellularAutomata.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "stdafx.h"
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <math.h>
 #include <iostream>
@@ -55,7 +56,8 @@ void drawSquare(double x, double y, double width, double height)
 void drawCell(double x, double y, int state)
 {
 	double width = VIEW_SIZE / CELLS_NO;
-	glColor3d((STATE_NO - 1 - state) / double(STATE_NO - 1), (STATE_NO - 1 - state) / double(STATE_NO - 1), (STATE_NO - 1 - state) / double(STATE_NO - 1));
+	glColor3d((STATE_NO - 1 - state) / double(STATE_NO - 1), (STATE_NO - 1 - state) / double(STATE_NO - 1),
+	          (STATE_NO - 1 - state) / double(STATE_NO - 1));
 	drawSquare(x, y, width, width);
 }
 
@@ -123,14 +125,15 @@ void init(void)
 
 int main(int argc, char* argv[])
 {
-	int ruleNo;
-	std::cout << "rule no. up to " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << std::endl;
-	std::cin >> ruleNo;
-	while (ruleNo >= pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) || ruleNo < 0)
-	{
-		std::cout << "out of possible rule No " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << ". type again... " << std::endl;
-		std::cin >> ruleNo;
-	}
+	int ruleNo = RULE_NO;
+	std::cout << "rule no." << ruleNo << std::endl;
+	//	std::cout << "rule no. up to " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << std::endl;
+	//	std::cin >> ruleNo;
+	//	while (ruleNo >= pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) || ruleNo < 0)
+	//	{
+	//		std::cout << "out of possible rule No " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << ". type again... " << std::endl;
+	//		std::cin >> ruleNo;
+	//	}
 	thisRule = Rule(ruleNo, STATE_NO, CELL_NEIGHBOR_NO);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA);
