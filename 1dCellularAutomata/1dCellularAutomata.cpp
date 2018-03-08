@@ -17,32 +17,32 @@
 class Rule
 {
 public:
-	int ruleNo;
-	int rulePatterns;
+	int rule_no;
+	int rule_patterns;
 
 	Rule(int _ruleNo = 0, int stateNo = 2, int neighborNo = 1)
 	{
-		ruleNo = _ruleNo;
-		rulePatterns = int(pow(double(STATE_NO), double(2) * CELL_NEIGHBOR_NO + 1));
+		rule_no = _ruleNo;
+		rule_patterns = int(pow(double(STATE_NO), double(2) * CELL_NEIGHBOR_NO + 1));
 	}
 
-	int getNextState(int decimalState)
+	int get_next_state(int decimalState)
 	{
-		int nextState = 0;
-		int leftDecimal = ruleNo;
+		int next_state = 0;
+		int left_decimal = rule_no;
 		for (int i = 0; i <= decimalState; i++)
 		{
-			nextState = leftDecimal % STATE_NO;
-			leftDecimal /= STATE_NO;
+			next_state = left_decimal % STATE_NO;
+			left_decimal /= STATE_NO;
 		}
-		return nextState;
+		return next_state;
 	}
 };
 
-Rule thisRule = Rule();
+Rule this_rule = Rule();
 
 //render square
-void drawSquare(double x, double y, double width, double height)
+void draw_square(double x, double y, double width, double height)
 {
 	glBegin(GL_POLYGON);
 	glVertex2d(x, y);
@@ -53,37 +53,37 @@ void drawSquare(double x, double y, double width, double height)
 }
 
 //render single cell
-void drawCell(double x, double y, int state)
+void draw_cell(double x, double y, int state)
 {
 	double width = VIEW_SIZE / CELLS_NO;
 	glColor3d((STATE_NO - 1 - state) / double(STATE_NO - 1), (STATE_NO - 1 - state) / double(STATE_NO - 1),
 	          (STATE_NO - 1 - state) / double(STATE_NO - 1));
-	drawSquare(x, y, width, width);
+	draw_square(x, y, width, width);
 }
 
 //render cells row
-void drawCellsRow(int cells[CELLS_NO], int time)
+void draw_cells_row(int cells[CELLS_NO], int time)
 {
 	double width = VIEW_SIZE / CELLS_NO;
 	double x = -VIEW_SIZE / 2.0;
 	double y = (TIME_LIM / 2.0 - double(time) - 1.0) * width;
 	for (int i = 0; i < CELLS_NO; i++)
 	{
-		drawCell(x, y, cells[i]);
+		draw_cell(x, y, cells[i]);
 		x += width;
 	}
 }
 
 //cell update by Rule
-int updateCell(int neighborCells[CELL_NEIGHBOR_NO * 2 + 1])
+int update_cell(int neighbor_cells[CELL_NEIGHBOR_NO * 2 + 1])
 {
-	int decimalState = 0;
-	int cellMaxNo = CELL_NEIGHBOR_NO * 2 + 1;
-	for (int i = 0; i < cellMaxNo; i++)
+	int decimal_state = 0;
+	int cell_max_no = CELL_NEIGHBOR_NO * 2 + 1;
+	for (int i = 0; i < cell_max_no; i++)
 	{
-		decimalState += int(pow(double(STATE_NO), double(i))) * neighborCells[cellMaxNo - i - 1];
+		decimal_state += int(pow(double(STATE_NO), double(i))) * neighbor_cells[cell_max_no - i - 1];
 	}
-	int n = thisRule.getNextState(decimalState);
+	int n = this_rule.get_next_state(decimal_state);
 	return n;
 }
 
@@ -91,42 +91,36 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	int cells[CELLS_NO] = {0}; //current cells state
-	int tmpCells[CELLS_NO] = {0}; //temporary cells array
+	int tmp_cells[CELLS_NO] = {0}; //temporary cells array
 	cells[int(CELLS_NO / 2.0)] = 1;
 	for (int i = 0; i < TIME_LIM; i++)
 	{
-		drawCellsRow(cells, i);
+		draw_cells_row(cells, i);
 		for (int j = 0; j < CELLS_NO; j++)
 		{
-			int neighborCells[CELL_NEIGHBOR_NO * 2 + 1] = {0};
+			int neighbor_cells[CELL_NEIGHBOR_NO * 2 + 1] = {0};
 			for (int l = 0; l < CELL_NEIGHBOR_NO * 2 + 1; l++)
 			{
 				int n = (j + l - CELL_NEIGHBOR_NO) % CELLS_NO;
-				if (n < 0)
-				{
-					n += CELLS_NO;
-				}
-				neighborCells[l] = cells[n];
+				if (n < 0) { n += CELLS_NO; }
+				neighbor_cells[l] = cells[n];
 			}
-			tmpCells[j] = updateCell(neighborCells);
+			tmp_cells[j] = update_cell(neighbor_cells);
 		}
 		for (int k = 0; k < CELLS_NO; k++)
 		{
-			cells[k] = tmpCells[k];
+			cells[k] = tmp_cells[k];
 		}
 	}
 	glFlush();
 }
 
-void init(void)
-{
-	glClearColor(0.0, 0.0, 1.0, 1.0);
-}
+void init(void) { glClearColor(0.0, 0.0, 1.0, 1.0); }
 
 int main(int argc, char* argv[])
 {
-	int ruleNo = RULE_NO;
-	std::cout << "rule no." << ruleNo << std::endl;
+	int rule_no = RULE_NO;
+	std::cout << "rule no." << rule_no << std::endl;
 	//	std::cout << "rule no. up to " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << std::endl;
 	//	std::cin >> ruleNo;
 	//	while (ruleNo >= pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) || ruleNo < 0)
@@ -134,7 +128,7 @@ int main(int argc, char* argv[])
 	//		std::cout << "out of possible rule No " << pow(STATE_NO, pow(STATE_NO, CELL_NEIGHBOR_NO * 2 + 1)) << ". type again... " << std::endl;
 	//		std::cin >> ruleNo;
 	//	}
-	thisRule = Rule(ruleNo, STATE_NO, CELL_NEIGHBOR_NO);
+	this_rule = Rule(rule_no, STATE_NO, CELL_NEIGHBOR_NO);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA);
 	glutCreateWindow(argv[0]);
